@@ -378,7 +378,7 @@
             endDateStr = nextDayObj.toISOString().split('T')[0].replace(/-/g, '');
         }
         const title = encodeURIComponent(currentFestivalData.name);
-        const details = encodeURIComponent('Kashmiri Hindu Festival calculated via Vijayshwar Jantri data.');
+        const details = encodeURIComponent('Kashmiri Hindu Festival calculated via Jantri data.');
         const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dateStr}/${endDateStr}&details=${details}`;
         window.open(url, '_blank');
     }
@@ -396,7 +396,7 @@
             nextDayObj.setDate(nextDayObj.getDate() + 1);
             endDateStr = nextDayObj.toISOString().split('T')[0].replace(/-/g, '');
         }
-        const icsContent = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Insights//Tracker//EN','CALSCALE:GREGORIAN','BEGIN:VEVENT',`DTSTART;VALUE=DATE:${dateStr}`,`DTEND;VALUE=DATE:${endDateStr}`,`SUMMARY:${currentFestivalData.name}`,'DESCRIPTION:Kashmiri Hindu Festival calculated via Vijayshwar Jantri.','STATUS:CONFIRMED','TRANSP:TRANSPARENT','END:VEVENT','END:VCALENDAR'].join('\r\n');
+        const icsContent = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Insights//Tracker//EN','CALSCALE:GREGORIAN','BEGIN:VEVENT',`DTSTART;VALUE=DATE:${dateStr}`,`DTEND;VALUE=DATE:${endDateStr}`,`SUMMARY:${currentFestivalData.name}`,'DESCRIPTION:Kashmiri Hindu Festival calculated via Jantri.','STATUS:CONFIRMED','TRANSP:TRANSPARENT','END:VEVENT','END:VCALENDAR'].join('\r\n');
         const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
@@ -409,8 +409,8 @@
     function shareAppWhatsApp() { window.open(`https://wa.me/?text=${encodeURIComponent('Discover accurate dates for Kashmiri festivals: ' + window.location.href)}`, '_blank'); }
     function shareAppFacebook() { window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank'); }
     function copyLink() { navigator.clipboard.writeText(window.location.href); alert("Link copied!"); }
-    function shareResultWhatsApp() { if (!currentFestivalData) return; window.open(`https://wa.me/?text=${encodeURIComponent('The date for ' + currentFestivalData.name + ' is ' + document.getElementById('result-date').innerText + ' according to the Vijayshwar Jantri. Check it here: ' + window.location.href)}`, '_blank'); }
-    function shareResultTwitter() { if (!currentFestivalData) return; window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('The date for ' + currentFestivalData.name + ' is ' + document.getElementById('result-date').innerText + ' according to the Vijayshwar Jantri.')}&url=${encodeURIComponent(window.location.href)}`, '_blank'); }
+    function shareResultWhatsApp() { if (!currentFestivalData) return; window.open(`https://wa.me/?text=${encodeURIComponent('The date for ' + currentFestivalData.name + ' is ' + document.getElementById('result-date').innerText + ' according to the Jantri. Check it here: ' + window.location.href)}`, '_blank'); }
+    function shareResultTwitter() { if (!currentFestivalData) return; window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('The date for ' + currentFestivalData.name + ' is ' + document.getElementById('result-date').innerText + ' according to the Jantri.')}&url=${encodeURIComponent(window.location.href)}`, '_blank'); }
     function openFeedback() { document.getElementById('feedback-modal').classList.remove('hidden'); }
     function closeFeedback() { document.getElementById('feedback-modal').classList.add('hidden'); }
     function toggleFeedbackType(type) {
