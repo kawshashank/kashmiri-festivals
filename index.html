@@ -267,6 +267,24 @@
                 Feedback
             </button>
         </div>
+
+        <!-- NEW: Dakshina Cold-Start Banner -->
+        <div id="dakshina-banner" class="hidden mt-6 anim-fade-up">
+            <div class="bg-[var(--paper-deep)] border border-[var(--brass-light)] p-5 rounded-xl shadow-sm relative overflow-hidden">
+                <div class="flex items-start gap-4 relative z-10">
+                    <div class="text-2xl animate-pulse" style="animation-duration: 2s;">🌙</div>
+                    <div class="text-left">
+                        <h4 class="font-display font-medium text-[var(--ink)] text-lg mb-1">Waking up the astronomical servers...</h4>
+                        <p class="text-[var(--ink-soft)] text-sm leading-relaxed">
+                            Since we don’t charge Dakshina for this digital tool, our servers like to take naps to save energy. Our digital pandit is currently waking up, stretching, and finding his glasses. Please give him 15–20 seconds to do the math!
+                        </p>
+                    </div>
+                </div>
+                <!-- Subtle background glow to match the theme -->
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-[var(--brass)] opacity-10 rounded-full blur-2xl"></div>
+            </div>
+        </div>
+
     </div>
 
     <div id="result-container" class="hidden anim-curtain mt-8 pt-8 border-t border-[var(--line)] text-center relative">
@@ -314,6 +332,7 @@
 <script>
     let currentFestivalData = null;
     let activeFeedbackType = 'general';
+    let slowLoadTimer; // Added for Cold-Start UX
     const HF_API_URL = "https://shashankkaw-kashmiri-festival.hf.space/get-festival-date";
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -327,6 +346,15 @@
             yearSelect.appendChild(option);
         });
         yearSelect.value = currentYear;
+
+        // 1. Silent Background Pre-Warming
+        try {
+            fetch(HF_API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ festival_key: "ping", year: currentYear })
+            }).catch(() => {}); // Intentionally ignore errors to keep it silent
+        } catch (e) {}
     });
 
     async function fetchFestival() {
@@ -334,9 +362,18 @@
         const year = document.getElementById('year').value;
         const btn = document.getElementById('fetch-btn');
         const resultContainer = document.getElementById('result-container');
+        const dakshinaBanner = document.getElementById('dakshina-banner');
+        
         btn.innerText = "Revealing Date...";
         btn.classList.add('opacity-70', 'cursor-not-allowed');
         resultContainer.classList.add('hidden');
+        dakshinaBanner.classList.add('hidden'); // Ensure banner is hidden on start
+
+        // 2. Smart 3.5-Second Delay Detector
+        slowLoadTimer = setTimeout(() => {
+            dakshinaBanner.classList.remove('hidden');
+        }, 3500);
+
         try {
             const response = await fetch(HF_API_URL, {
                 method: 'POST',
@@ -368,6 +405,10 @@
             console.error("API Error:", error);
             alert("Failed to connect. Ensure your Space is 'Running'.");
         } finally {
+            // Clear timer and ensure banner is hidden when data arrives
+            clearTimeout(slowLoadTimer);
+            dakshinaBanner.classList.add('hidden');
+
             btn.innerText = "Discover Festival Date";
             btn.classList.remove('opacity-70', 'cursor-not-allowed');
         }
