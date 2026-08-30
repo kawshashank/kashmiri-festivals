@@ -227,9 +227,14 @@
         <div id="single-result-view">
             <h3 id="result-date" class="text-3xl sm:text-4xl font-display font-medium italic shimmer-title tracking-tight leading-tight mb-2"></h3>
             <p class="text-[var(--ink-faint)] text-sm font-mono tracking-wide mt-3">Aligned to: <span id="result-tithi" class="text-[var(--brass)] font-medium"></span></p>
+            
+            <!-- Gaad Bath Specific Note -->
+            <div id="festival-context-note" class="hidden mt-4 bg-[var(--paper-deep)] border border-[var(--brass-light)] p-3 rounded-xl text-xs sm:text-sm text-[var(--ink-soft)] font-medium max-w-sm mx-auto shadow-sm">
+                <span class="text-[var(--rust)] mr-1">✨</span> <strong>Note:</strong> Gaad Bath is traditionally observed only on a Tuesday or Saturday during this period.
+            </div>
         </div>
 
-        <!-- Multi Date View (For Pann Windows) - NOW A SQUARED GRID -->
+        <!-- Multi Date View (For Pann Windows) -->
         <div id="multi-result-view" class="hidden mt-6 grid grid-cols-2 gap-3 sm:gap-4 text-left">
             <!-- JavaScript Injected Array -->
         </div>
@@ -299,6 +304,7 @@
         const btn = document.getElementById('fetch-btn');
         const resultContainer = document.getElementById('result-container');
         const dakshinaBanner = document.getElementById('dakshina-banner');
+        const contextNote = document.getElementById('festival-context-note');
         
         const singleView = document.getElementById('single-result-view');
         const multiView = document.getElementById('multi-result-view');
@@ -307,6 +313,7 @@
         btn.classList.add('opacity-70', 'cursor-not-allowed');
         resultContainer.classList.add('hidden');
         dakshinaBanner.classList.add('hidden');
+        contextNote.classList.add('hidden'); // Reset note state
 
         slowLoadTimer = setTimeout(() => {
             dakshinaBanner.classList.remove('hidden');
@@ -389,6 +396,11 @@
                 
                 document.getElementById('result-date').innerText = displayDate;
                 document.getElementById('result-tithi').innerText = data.tithi || "Unknown Tithi";
+
+                // Show Gaad Bath Context Note if applicable
+                if (festival === 'gaad_bath') {
+                    contextNote.classList.remove('hidden');
+                }
             }
 
             resultContainer.classList.remove('hidden');
