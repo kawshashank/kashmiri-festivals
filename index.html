@@ -28,6 +28,7 @@
     .font-mono{ font-family:'IBM Plex Mono', monospace; }
 
     .grain{ position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.5; mix-blend-mode:multiply; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E"); }
+    
     @keyframes fadeUp { from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);} }
     @keyframes growIn { from{opacity:0; transform:scale(.92) translateY(10px); filter:blur(6px);} to{opacity:1; transform:scale(1) translateY(0); filter:blur(0);} }
     @keyframes shimmerText { 0%{ background-position:0% 50%; } 100%{ background-position:200% 50%; } }
@@ -40,6 +41,7 @@
     .anim-fade-up{ animation:fadeUp .9s cubic-bezier(.16,1,.3,1) forwards; }
     .anim-grow-in{ animation:growIn 1.1s cubic-bezier(.16,1,.3,1) forwards; }
     .anim-curtain{ animation:curtainReveal 1.1s cubic-bezier(.22,1,.36,1) forwards; }
+
     .shimmer-title{ background:linear-gradient(100deg, var(--ink) 30%, var(--brass) 45%, var(--rust) 50%, var(--ink) 65%); background-size:250% auto; -webkit-background-clip:text; background-clip:text; color:transparent; animation:shimmerText 7s linear infinite; }
     .float-leaf{ position:absolute; pointer-events:none; opacity:.16; color:var(--brass); }
     .float-a{ animation:floatLeafA 13s ease-in-out infinite; }
@@ -227,8 +229,8 @@
             <p class="text-[var(--ink-faint)] text-sm font-mono tracking-wide mt-3">Aligned to: <span id="result-tithi" class="text-[var(--brass)] font-medium"></span></p>
         </div>
 
-        <!-- Multi Date View (For Pann Windows) -->
-        <div id="multi-result-view" class="hidden text-left mt-6 space-y-3">
+        <!-- Multi Date View (For Pann Windows) - NOW A SQUARED GRID -->
+        <div id="multi-result-view" class="hidden mt-6 grid grid-cols-2 gap-3 sm:gap-4 text-left">
             <!-- JavaScript Injected Array -->
         </div>
 
@@ -324,26 +326,47 @@
             const formatOptions = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('festival-title-display').innerText = data.name;
 
-            // Handle Multi-Date Arrays (e.g. Pann)
+            // Handle Multi-Date Arrays (GRID LAYOUT)
             if (data.is_multi) {
                 singleView.classList.add('hidden');
                 multiView.classList.remove('hidden');
                 
                 let multiHtml = '';
                 data.dates.forEach((d, idx) => {
-                    const dObj = new Date(d.date);
+                    const dObj = new Date(d.date + 'T00:00:00'); // Force local parsing
+                    const dayNum = dObj.getDate();
+                    const monthName = dObj.toLocaleDateString('en-US', { month: 'short' });
+                    const yr = dObj.getFullYear();
+                    const weekday = dObj.toLocaleDateString('en-US', { weekday: 'long' });
                     const isPrimary = idx === 0;
-                    multiHtml += `
-                    <div class="bg-white/50 border border-[var(--line)] p-4 rounded-2xl text-left shadow-sm transition-all ${isPrimary ? 'ring-1 ring-[var(--brass)] bg-[var(--paper-deep)] scale-[1.01]' : ''}">
-                        <div class="flex justify-between items-center mb-1.5">
-                            <span class="font-display text-lg text-[var(--ink)] font-medium ${isPrimary ? 'text-[var(--rust)]' : ''}">${dObj.toLocaleDateString('en-US', formatOptions)}</span>
-                            ${isPrimary 
-                                ? '<span class="text-[9px] uppercase tracking-wider bg-[var(--brass-light)] text-[var(--ink)] px-2 py-1 rounded font-bold shadow-sm">Primary</span>' 
-                                : '<span class="text-[9px] uppercase tracking-wider text-[var(--ink-soft)] font-bold bg-white border border-[var(--line)] px-2 py-1 rounded">Alternative Option</span>'
-                            }
-                        </div>
-                        <p class="text-[11px] font-mono text-[var(--ink-soft)] uppercase tracking-wide">Aligned to: <span class="text-[var(--brass)] font-semibold normal-case">${d.tithi}</span></p>
-                    </div>`;
+
+                    if (isPrimary) {
+                        multiHtml += `
+                        <div class="col-span-2 bg-[var(--paper-deep)] ring-1 ring-[var(--brass)] p-5 rounded-2xl shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-transform hover:scale-[1.01]">
+                            <div>
+                                <div class="mb-2">
+                                    <span class="text-[9px] uppercase tracking-wider bg-[var(--brass-light)] text-[var(--ink)] px-2 py-1 rounded font-bold shadow-sm">Primary Date</span>
+                                </div>
+                                <div class="font-display text-2xl sm:text-3xl text-[var(--rust)] font-medium leading-tight">${dayNum} ${monthName} ${yr}</div>
+                                <div class="text-xs sm:text-sm text-[var(--ink-soft)] mt-1 font-medium">${weekday}</div>
+                            </div>
+                            <div class="sm:text-right border-t sm:border-t-0 sm:border-l border-[var(--brass)]/30 pt-3 sm:pt-0 sm:pl-4 flex-1">
+                                <p class="text-[9px] font-mono uppercase tracking-wide text-[var(--ink-soft)] mb-1">Aligned to</p>
+                                <p class="text-[11px] sm:text-xs font-bold text-[var(--brass)] leading-snug">${d.tithi}</p>
+                            </div>
+                        </div>`;
+                    } else {
+                        multiHtml += `
+                        <div class="col-span-1 bg-white/50 border border-[var(--line)] p-4 rounded-2xl flex flex-col h-full shadow-sm hover:border-[var(--brass)] transition-colors">
+                            <span class="text-[9px] uppercase tracking-wider text-[var(--ink-faint)] font-bold mb-2">Alternative</span>
+                            <div class="font-display text-xl sm:text-2xl text-[var(--ink)] font-medium leading-none">${dayNum} ${monthName}</div>
+                            <div class="text-[11px] sm:text-xs text-[var(--ink-soft)] mt-1.5 font-medium">${weekday}</div>
+                            <div class="mt-auto pt-3">
+                                <div class="w-full h-px bg-[var(--line)] mb-2"></div>
+                                <p class="text-[9px] font-mono text-[var(--brass)] font-semibold leading-tight">${d.tithi}</p>
+                            </div>
+                        </div>`;
+                    }
                 });
                 multiView.innerHTML = multiHtml;
             } 
@@ -385,7 +408,6 @@
         if (!currentFestivalData) return;
         
         let dateStr, endDateStr, calTitle;
-        // For GCal, if it's multi-date, we only link the Primary date to keep the URL simple.
         if (currentFestivalData.is_multi) {
             const firstDate = currentFestivalData.dates[0].date;
             dateStr = firstDate.replace(/-/g, '');
@@ -424,7 +446,6 @@
         ];
 
         if (currentFestivalData.is_multi) {
-            // Append an event block for every single date option
             currentFestivalData.dates.forEach((d, idx) => {
                 const dateStr = d.date.replace(/-/g, '');
                 const nextDayObj = new Date(d.date);
@@ -442,7 +463,6 @@
                 icsContent.push('END:VEVENT');
             });
         } else {
-            // Standard single or range block
             const dateStr = currentFestivalData.date.replace(/-/g, '');
             let endDateStr;
             if (currentFestivalData.end_date) {
