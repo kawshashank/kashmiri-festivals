@@ -23,32 +23,15 @@
     }
     *{box-sizing:border-box;}
     html{scroll-behavior:smooth;}
-    body{
-        font-family:'Manrope',sans-serif;
-        background-color:var(--paper);
-        color:var(--ink);
-    }
+    body{ font-family:'Manrope',sans-serif; background-color:var(--paper); color:var(--ink); }
     .font-display{ font-family:'Fraunces', serif; }
     .font-mono{ font-family:'IBM Plex Mono', monospace; }
 
-    /* Paper Grain */
-    .grain{
-        position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.5; mix-blend-mode:multiply;
-        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
-    }
-
-    /* Animations */
+    .grain{ position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.5; mix-blend-mode:multiply; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E"); }
     @keyframes fadeUp { from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);} }
     @keyframes growIn { from{opacity:0; transform:scale(.92) translateY(10px); filter:blur(6px);} to{opacity:1; transform:scale(1) translateY(0); filter:blur(0);} }
-    @keyframes shimmerText {
-        0%{ background-position:0% 50%; }
-        100%{ background-position:200% 50%; }
-    }
-    @keyframes curtainReveal {
-        0%{ clip-path:inset(0 0 100% 0); opacity:0; transform:translateY(14px) scale(.98); }
-        55%{ opacity:1; }
-        100%{ clip-path:inset(0 0 0% 0); opacity:1; transform:translateY(0) scale(1); }
-    }
+    @keyframes shimmerText { 0%{ background-position:0% 50%; } 100%{ background-position:200% 50%; } }
+    @keyframes curtainReveal { 0%{ clip-path:inset(0 0 100% 0); opacity:0; transform:translateY(14px) scale(.98); } 55%{ opacity:1; } 100%{ clip-path:inset(0 0 0% 0); opacity:1; transform:translateY(0) scale(1); } }
     @keyframes floatLeafA { 0%{ transform:translate(0,0) rotate(0deg);} 50%{ transform:translate(24px,-40px) rotate(18deg);} 100%{ transform:translate(0,0) rotate(0deg);} }
     @keyframes floatLeafB { 0%{ transform:translate(0,0) rotate(0deg);} 50%{ transform:translate(-30px,30px) rotate(-14deg);} 100%{ transform:translate(0,0) rotate(0deg);} }
     @keyframes floatLeafC { 0%{ transform:translate(0,0) rotate(0deg);} 50%{ transform:translate(18px,26px) rotate(10deg);} 100%{ transform:translate(0,0) rotate(0deg);} }
@@ -57,71 +40,27 @@
     .anim-fade-up{ animation:fadeUp .9s cubic-bezier(.16,1,.3,1) forwards; }
     .anim-grow-in{ animation:growIn 1.1s cubic-bezier(.16,1,.3,1) forwards; }
     .anim-curtain{ animation:curtainReveal 1.1s cubic-bezier(.22,1,.36,1) forwards; }
-
-    .shimmer-title{
-        background:linear-gradient(100deg, var(--ink) 30%, var(--brass) 45%, var(--rust) 50%, var(--ink) 65%);
-        background-size:250% auto;
-        -webkit-background-clip:text; background-clip:text; color:transparent;
-        animation:shimmerText 7s linear infinite;
-    }
-
+    .shimmer-title{ background:linear-gradient(100deg, var(--ink) 30%, var(--brass) 45%, var(--rust) 50%, var(--ink) 65%); background-size:250% auto; -webkit-background-clip:text; background-clip:text; color:transparent; animation:shimmerText 7s linear infinite; }
     .float-leaf{ position:absolute; pointer-events:none; opacity:.16; color:var(--brass); }
     .float-a{ animation:floatLeafA 13s ease-in-out infinite; }
     .float-b{ animation:floatLeafB 17s ease-in-out infinite; }
     .float-c{ animation:floatLeafC 11s ease-in-out infinite; }
 
-    /* Custom Input Styles */
-    .ledger-field{
-        background:rgba(255,255,255,.35);
-        border:none;
-        border-bottom:1.5px solid var(--line);
-        border-radius:.6rem .6rem 0 0;
-        padding:.9rem .9rem .75rem .9rem;
-        transition:border-color .25s ease, background-color .25s ease;
-        color:var(--ink);
-    }
+    .ledger-field{ background:rgba(255,255,255,.35); border:none; border-bottom:1.5px solid var(--line); border-radius:.6rem .6rem 0 0; padding:.9rem .9rem .75rem .9rem; transition:border-color .25s ease, background-color .25s ease; color:var(--ink); }
     .ledger-field:focus{ outline:none; border-bottom-color:var(--brass); background:rgba(255,255,255,.6); }
     select.ledger-field{ appearance:none; -webkit-appearance:none; }
 
-    /* Custom Button Styles */
-    .brass-btn{
-        background:linear-gradient(155deg, var(--brass-light) 0%, var(--brass) 55%, #8f6527 100%);
-        color:#2a1c0c;
-        box-shadow: 0 1px 0 rgba(255,255,255,.4) inset, 0 10px 24px -10px rgba(140,95,30,.55);
-        position:relative; overflow:hidden;
-    }
+    .brass-btn{ background:linear-gradient(155deg, var(--brass-light) 0%, var(--brass) 55%, #8f6527 100%); color:#2a1c0c; box-shadow: 0 1px 0 rgba(255,255,255,.4) inset, 0 10px 24px -10px rgba(140,95,30,.55); position:relative; overflow:hidden; }
     .brass-btn:hover{ filter:brightness(1.05); box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 16px 32px -10px rgba(140,95,30,.75); transform:translateY(-2px); }
     .brass-btn:active{ filter:brightness(.98); transform:translateY(0); }
 
-    .icon-btn{
-        display:flex; align-items:center; justify-content:center;
-        border:1.5px solid var(--line);
-        background:rgba(255,255,255,.5);
-        color:var(--ink-soft);
-        transition:all .25s ease;
-    }
+    .icon-btn{ display:flex; align-items:center; justify-content:center; border:1.5px solid var(--line); background:rgba(255,255,255,.5); color:var(--ink-soft); transition:all .25s ease; }
     .icon-btn:hover{ border-color:var(--brass); color:var(--brass); background:#fffaf0; transform:translateY(-3px) rotate(-4deg); }
 
-    /* Glass Card */
-    .glass-card{
-        background:rgba(255,255,255,.42);
-        backdrop-filter:blur(22px) saturate(140%);
-        -webkit-backdrop-filter:blur(22px) saturate(140%);
-        border:1px solid rgba(255,255,255,.55);
-        box-shadow:0 30px 70px -30px rgba(36,26,19,.35), 0 1px 0 rgba(255,255,255,.6) inset;
-    }
-
-    .eyebrow{
-        font-family:'IBM Plex Mono', monospace;
-        letter-spacing:.22em;
-        font-size:.65rem;
-        text-transform:uppercase;
-    }
-
+    .glass-card{ background:rgba(255,255,255,.42); backdrop-filter:blur(22px) saturate(140%); border:1px solid rgba(255,255,255,.55); box-shadow:0 30px 70px -30px rgba(36,26,19,.35), 0 1px 0 rgba(255,255,255,.6) inset; }
+    .eyebrow{ font-family:'IBM Plex Mono', monospace; letter-spacing:.22em; font-size:.65rem; text-transform:uppercase; }
     .modal-scroll::-webkit-scrollbar{ width:6px; }
-    .modal-scroll::-webkit-scrollbar-track{ background:transparent; }
     .modal-scroll::-webkit-scrollbar-thumb{ background:rgba(36,26,19,.15); border-radius:10px; }
-    
     ::selection{ background:var(--gold-foil); color:var(--ink); }
 </style>
 </head>
@@ -140,7 +79,6 @@
     <div class="absolute bottom-[-16%] right-[-10%] w-[48%] h-[48%] rounded-full bg-[#9c4a30]/12 blur-[130px]" style="animation:glowPulse 11s ease-in-out infinite 1.5s;"></div>
 </div>
 
-<!-- --- Floating Back to Hub Button (Top Right) --- -->
 <a href="https://vitastahub.vercel.app/" class="fixed top-4 right-4 sm:top-6 sm:right-6 z-[55] flex items-center gap-2 px-4 py-2 bg-white/40 backdrop-blur-md border border-[var(--line)] rounded-full shadow-sm text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[var(--ink-soft)] hover:text-[var(--brass)] hover:border-[var(--brass)] hover:bg-white/60 hover:shadow-md hover:-translate-x-0.5 transition-all">
     <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
         <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -152,7 +90,6 @@
 <div id="feedback-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-[#0e1119]/55 backdrop-blur-md p-4 h-[100dvh]">
     <div class="bg-[#fcfbf9] w-full max-w-lg rounded-[1.75rem] anim-grow-in border border-[var(--line)] shadow-2xl">
         <div class="overflow-hidden flex flex-col max-h-[85dvh] rounded-[1.75rem]">
-
             <div class="flex justify-between items-center px-6 py-5 border-b border-[var(--line)] shrink-0">
                 <div>
                     <p class="eyebrow text-[var(--brass)] mb-1">Correspondence</p>
@@ -160,7 +97,6 @@
                 </div>
                 <button onclick="closeFeedback()" class="text-[var(--brass)] hover:text-[var(--rust)] text-3xl leading-none transition-colors">&times;</button>
             </div>
-
             <form id="feedback-form" onsubmit="handleFeedbackSubmit(event)" class="flex flex-col flex-1 overflow-hidden">
                 <div class="p-6 sm:p-8 space-y-5 overflow-y-auto modal-scroll flex-1">
                     <div>
@@ -176,12 +112,10 @@
                             </label>
                         </div>
                     </div>
-
                     <div>
                         <label class="block eyebrow text-[var(--ink-soft)] mb-1.5">Your Email Address</label>
                         <input type="email" id="fb_email" placeholder="name@example.com" class="w-full ledger-field bg-white/50 !py-2.5 !px-3" required />
                     </div>
-
                     <div id="feedback-bug-fields" class="hidden anim-fade-up">
                         <div class="grid grid-cols-2 gap-x-4 gap-y-3">
                             <div class="col-span-1">
@@ -202,13 +136,11 @@
                             </div>
                         </div>
                     </div>
-
                     <div id="feedback-general-fields" class="anim-fade-up">
                         <label class="block eyebrow text-[var(--ink-soft)] mb-1.5">Your Thoughts</label>
                         <textarea id="fb_text" rows="3" class="w-full ledger-field bg-white/50 !py-2.5 !px-3 resize-none"></textarea>
                     </div>
                 </div>
-
                 <div class="p-6 sm:px-8 sm:pb-8 pt-3 shrink-0 border-t border-[var(--line)]">
                     <button type="submit" class="w-full brass-btn font-semibold tracking-wide py-3.5 rounded-xl transition-all active:scale-[0.98]">
                         Send Message
@@ -220,11 +152,8 @@
 </div>
 
 <main class="relative z-10 glass-card w-full max-w-lg rounded-[2.5rem] p-8 sm:p-12 shadow-2xl anim-grow-in my-8">
-    
     <div class="text-center mb-8">
-        <h1 class="text-4xl sm:text-5xl font-display font-medium italic shimmer-title tracking-tight mb-2">
-            Kashmiri Festival Lookup
-        </h1>
+        <h1 class="text-4xl sm:text-5xl font-display font-medium italic shimmer-title tracking-tight mb-2">Kashmiri Festival Lookup</h1>
     </div>
 
     <div class="space-y-6">
@@ -268,7 +197,6 @@
             </button>
         </div>
 
-        <!-- NEW: Dakshina Cold-Start Banner -->
         <div id="dakshina-banner" class="hidden mt-6 anim-fade-up">
             <div class="bg-[var(--paper-deep)] border border-[var(--brass-light)] p-5 rounded-xl shadow-sm relative overflow-hidden">
                 <div class="flex items-start gap-4 relative z-10">
@@ -280,13 +208,12 @@
                         </p>
                     </div>
                 </div>
-                <!-- Subtle background glow to match the theme -->
                 <div class="absolute -right-4 -top-4 w-24 h-24 bg-[var(--brass)] opacity-10 rounded-full blur-2xl"></div>
             </div>
         </div>
-
     </div>
 
+    <!-- RESULT CONTAINER -->
     <div id="result-container" class="hidden anim-curtain mt-8 pt-8 border-t border-[var(--line)] text-center relative">
         <div class="flex items-center justify-center gap-2 mb-3">
             <svg class="leaf-icon text-[var(--brass)] w-4 h-4" viewBox="0 0 100 100"><use href="#chinar-leaf"/></svg>
@@ -294,8 +221,16 @@
             <svg class="leaf-icon text-[var(--brass)] w-4 h-4" viewBox="0 0 100 100" style="transform:scaleX(-1);"><use href="#chinar-leaf"/></svg>
         </div>
 
-        <h3 id="result-date" class="text-3xl sm:text-4xl font-display font-medium italic shimmer-title tracking-tight leading-tight mb-2"></h3>
-        <p class="text-[var(--ink-faint)] text-sm font-mono tracking-wide mt-3">Aligned to: <span id="result-tithi" class="text-[var(--brass)] font-medium"></span></p>
+        <!-- Single Date View -->
+        <div id="single-result-view">
+            <h3 id="result-date" class="text-3xl sm:text-4xl font-display font-medium italic shimmer-title tracking-tight leading-tight mb-2"></h3>
+            <p class="text-[var(--ink-faint)] text-sm font-mono tracking-wide mt-3">Aligned to: <span id="result-tithi" class="text-[var(--brass)] font-medium"></span></p>
+        </div>
+
+        <!-- Multi Date View (For Pann Windows) -->
+        <div id="multi-result-view" class="hidden text-left mt-6 space-y-3">
+            <!-- JavaScript Injected Array -->
+        </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
             <button onclick="addToGoogleCalendar()" class="group flex items-center justify-center bg-white/50 border border-[var(--line)] text-[var(--ink-soft)] font-medium text-sm tracking-wide py-3 px-4 rounded-xl hover:border-[var(--brass)] hover:text-[var(--brass)] transition-all">
@@ -332,7 +267,7 @@
 <script>
     let currentFestivalData = null;
     let activeFeedbackType = 'general';
-    let slowLoadTimer; // Added for Cold-Start UX
+    let slowLoadTimer; 
     const HF_API_URL = "https://shashankkaw-kashmiri-festival.hf.space/get-festival-date";
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -347,13 +282,12 @@
         });
         yearSelect.value = currentYear;
 
-        // 1. Silent Background Pre-Warming
         try {
             fetch(HF_API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ festival_key: "ping", year: currentYear })
-            }).catch(() => {}); // Intentionally ignore errors to keep it silent
+            }).catch(() => {});
         } catch (e) {}
     });
 
@@ -364,12 +298,14 @@
         const resultContainer = document.getElementById('result-container');
         const dakshinaBanner = document.getElementById('dakshina-banner');
         
+        const singleView = document.getElementById('single-result-view');
+        const multiView = document.getElementById('multi-result-view');
+        
         btn.innerText = "Revealing Date...";
         btn.classList.add('opacity-70', 'cursor-not-allowed');
         resultContainer.classList.add('hidden');
-        dakshinaBanner.classList.add('hidden'); // Ensure banner is hidden on start
+        dakshinaBanner.classList.add('hidden');
 
-        // 2. Smart 3.5-Second Delay Detector
         slowLoadTimer = setTimeout(() => {
             dakshinaBanner.classList.remove('hidden');
         }, 3500);
@@ -383,32 +319,63 @@
             if (!response.ok) throw new Error(`Server error: ${response.status}`);
             const data = await response.json();
             if (data.error) { alert(data.error); return; }
+            
             currentFestivalData = data;
-            const dateObj = new Date(data.date);
             const formatOptions = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
-            let displayDate = dateObj.toLocaleDateString('en-US', formatOptions);
-            if (data.end_date) {
-                const endDateObj = new Date(data.end_date);
-                displayDate = `${displayDate}  –  ${endDateObj.toLocaleDateString('en-US', formatOptions)}`;
-                document.getElementById('result-date').classList.remove('sm:text-4xl');
-                document.getElementById('result-date').classList.add('sm:text-3xl');
-            } else {
-                document.getElementById('result-date').classList.add('sm:text-4xl');
-                document.getElementById('result-date').classList.remove('sm:text-3xl');
-            }
             document.getElementById('festival-title-display').innerText = data.name;
-            document.getElementById('result-date').innerText = displayDate;
-            document.getElementById('result-tithi').innerText = data.tithi || "Unknown Tithi";
+
+            // Handle Multi-Date Arrays (e.g. Pann)
+            if (data.is_multi) {
+                singleView.classList.add('hidden');
+                multiView.classList.remove('hidden');
+                
+                let multiHtml = '';
+                data.dates.forEach((d, idx) => {
+                    const dObj = new Date(d.date);
+                    const isPrimary = idx === 0;
+                    multiHtml += `
+                    <div class="bg-white/50 border border-[var(--line)] p-4 rounded-2xl text-left shadow-sm transition-all ${isPrimary ? 'ring-1 ring-[var(--brass)] bg-[var(--paper-deep)] scale-[1.01]' : ''}">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <span class="font-display text-lg text-[var(--ink)] font-medium ${isPrimary ? 'text-[var(--rust)]' : ''}">${dObj.toLocaleDateString('en-US', formatOptions)}</span>
+                            ${isPrimary 
+                                ? '<span class="text-[9px] uppercase tracking-wider bg-[var(--brass-light)] text-[var(--ink)] px-2 py-1 rounded font-bold shadow-sm">Primary</span>' 
+                                : '<span class="text-[9px] uppercase tracking-wider text-[var(--ink-soft)] font-bold bg-white border border-[var(--line)] px-2 py-1 rounded">Alternative Option</span>'
+                            }
+                        </div>
+                        <p class="text-[11px] font-mono text-[var(--ink-soft)] uppercase tracking-wide">Aligned to: <span class="text-[var(--brass)] font-semibold normal-case">${d.tithi}</span></p>
+                    </div>`;
+                });
+                multiView.innerHTML = multiHtml;
+            } 
+            // Handle Single Dates & Ranges
+            else {
+                multiView.classList.add('hidden');
+                singleView.classList.remove('hidden');
+                
+                const dateObj = new Date(data.date);
+                let displayDate = dateObj.toLocaleDateString('en-US', formatOptions);
+                if (data.end_date) {
+                    const endDateObj = new Date(data.end_date);
+                    displayDate = `${displayDate}  –  ${endDateObj.toLocaleDateString('en-US', formatOptions)}`;
+                    document.getElementById('result-date').classList.remove('sm:text-4xl');
+                    document.getElementById('result-date').classList.add('sm:text-3xl');
+                } else {
+                    document.getElementById('result-date').classList.add('sm:text-4xl');
+                    document.getElementById('result-date').classList.remove('sm:text-3xl');
+                }
+                
+                document.getElementById('result-date').innerText = displayDate;
+                document.getElementById('result-tithi').innerText = data.tithi || "Unknown Tithi";
+            }
+
             resultContainer.classList.remove('hidden');
             setTimeout(() => resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
         } catch (error) {
             console.error("API Error:", error);
             alert("Failed to connect. Ensure your Space is 'Running'.");
         } finally {
-            // Clear timer and ensure banner is hidden when data arrives
             clearTimeout(slowLoadTimer);
             dakshinaBanner.classList.add('hidden');
-
             btn.innerText = "Discover Festival Date";
             btn.classList.remove('opacity-70', 'cursor-not-allowed');
         }
@@ -416,18 +383,31 @@
 
     function addToGoogleCalendar() {
         if (!currentFestivalData) return;
-        const dateStr = currentFestivalData.date.replace(/-/g, '');
-        let endDateStr;
-        if (currentFestivalData.end_date) {
-            const endDayObj = new Date(currentFestivalData.end_date);
-            endDayObj.setDate(endDayObj.getDate() + 1);
-            endDateStr = endDayObj.toISOString().split('T')[0].replace(/-/g, '');
-        } else {
-            const nextDayObj = new Date(currentFestivalData.date);
+        
+        let dateStr, endDateStr, calTitle;
+        // For GCal, if it's multi-date, we only link the Primary date to keep the URL simple.
+        if (currentFestivalData.is_multi) {
+            const firstDate = currentFestivalData.dates[0].date;
+            dateStr = firstDate.replace(/-/g, '');
+            const nextDayObj = new Date(firstDate);
             nextDayObj.setDate(nextDayObj.getDate() + 1);
             endDateStr = nextDayObj.toISOString().split('T')[0].replace(/-/g, '');
+            calTitle = currentFestivalData.name + " (Primary Date)";
+        } else {
+            dateStr = currentFestivalData.date.replace(/-/g, '');
+            calTitle = currentFestivalData.name;
+            if (currentFestivalData.end_date) {
+                const endDayObj = new Date(currentFestivalData.end_date);
+                endDayObj.setDate(endDayObj.getDate() + 1);
+                endDateStr = endDayObj.toISOString().split('T')[0].replace(/-/g, '');
+            } else {
+                const nextDayObj = new Date(currentFestivalData.date);
+                nextDayObj.setDate(nextDayObj.getDate() + 1);
+                endDateStr = nextDayObj.toISOString().split('T')[0].replace(/-/g, '');
+            }
         }
-        const title = encodeURIComponent(currentFestivalData.name);
+        
+        const title = encodeURIComponent(calTitle);
         const details = encodeURIComponent('Kashmiri Hindu Festival calculated via Jantri data.');
         const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dateStr}/${endDateStr}&details=${details}`;
         window.open(url, '_blank');
@@ -435,19 +415,58 @@
 
     function downloadICS() {
         if (!currentFestivalData) return;
-        const dateStr = currentFestivalData.date.replace(/-/g, '');
-        let endDateStr;
-        if (currentFestivalData.end_date) {
-            const endDayObj = new Date(currentFestivalData.end_date);
-            endDayObj.setDate(endDayObj.getDate() + 1);
-            endDateStr = endDayObj.toISOString().split('T')[0].replace(/-/g, '');
+        
+        let icsContent = [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'PRODID:-//Insights//Tracker//EN',
+            'CALSCALE:GREGORIAN'
+        ];
+
+        if (currentFestivalData.is_multi) {
+            // Append an event block for every single date option
+            currentFestivalData.dates.forEach((d, idx) => {
+                const dateStr = d.date.replace(/-/g, '');
+                const nextDayObj = new Date(d.date);
+                nextDayObj.setDate(nextDayObj.getDate() + 1);
+                const endDateStr = nextDayObj.toISOString().split('T')[0].replace(/-/g, '');
+                const titleSuffix = idx === 0 ? "(Primary Date)" : "(Alternative)";
+                
+                icsContent.push('BEGIN:VEVENT');
+                icsContent.push(`DTSTART;VALUE=DATE:${dateStr}`);
+                icsContent.push(`DTEND;VALUE=DATE:${endDateStr}`);
+                icsContent.push(`SUMMARY:${currentFestivalData.name} ${titleSuffix}`);
+                icsContent.push(`DESCRIPTION:Kashmiri Hindu Festival calculated via Jantri.\\n\\nAligned to: ${d.tithi}`);
+                icsContent.push('STATUS:CONFIRMED');
+                icsContent.push('TRANSP:TRANSPARENT');
+                icsContent.push('END:VEVENT');
+            });
         } else {
-            const nextDayObj = new Date(currentFestivalData.date);
-            nextDayObj.setDate(nextDayObj.getDate() + 1);
-            endDateStr = nextDayObj.toISOString().split('T')[0].replace(/-/g, '');
+            // Standard single or range block
+            const dateStr = currentFestivalData.date.replace(/-/g, '');
+            let endDateStr;
+            if (currentFestivalData.end_date) {
+                const endDayObj = new Date(currentFestivalData.end_date);
+                endDayObj.setDate(endDayObj.getDate() + 1);
+                endDateStr = endDayObj.toISOString().split('T')[0].replace(/-/g, '');
+            } else {
+                const nextDayObj = new Date(currentFestivalData.date);
+                nextDayObj.setDate(nextDayObj.getDate() + 1);
+                endDateStr = nextDayObj.toISOString().split('T')[0].replace(/-/g, '');
+            }
+            icsContent.push('BEGIN:VEVENT');
+            icsContent.push(`DTSTART;VALUE=DATE:${dateStr}`);
+            icsContent.push(`DTEND;VALUE=DATE:${endDateStr}`);
+            icsContent.push(`SUMMARY:${currentFestivalData.name}`);
+            icsContent.push('DESCRIPTION:Kashmiri Hindu Festival calculated via Jantri.');
+            icsContent.push('STATUS:CONFIRMED');
+            icsContent.push('TRANSP:TRANSPARENT');
+            icsContent.push('END:VEVENT');
         }
-        const icsContent = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Insights//Tracker//EN','CALSCALE:GREGORIAN','BEGIN:VEVENT',`DTSTART;VALUE=DATE:${dateStr}`,`DTEND;VALUE=DATE:${endDateStr}`,`SUMMARY:${currentFestivalData.name}`,'DESCRIPTION:Kashmiri Hindu Festival calculated via Jantri.','STATUS:CONFIRMED','TRANSP:TRANSPARENT','END:VEVENT','END:VCALENDAR'].join('\r\n');
-        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+
+        icsContent.push('END:VCALENDAR');
+        
+        const blob = new Blob([icsContent.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
         link.setAttribute('download', `${currentFestivalData.name.replace(/[^a-zA-Z0-9]/g, '_')}_${document.getElementById('year').value}.ics`);
@@ -459,8 +478,18 @@
     function shareAppWhatsApp() { window.open(`https://wa.me/?text=${encodeURIComponent('Discover accurate dates for Kashmiri festivals: ' + window.location.href)}`, '_blank'); }
     function shareAppFacebook() { window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank'); }
     function copyLink() { navigator.clipboard.writeText(window.location.href); alert("Link copied!"); }
-    function shareResultWhatsApp() { if (!currentFestivalData) return; window.open(`https://wa.me/?text=${encodeURIComponent('The date for ' + currentFestivalData.name + ' is ' + document.getElementById('result-date').innerText + ' according to the Jantri. Check it here: ' + window.location.href)}`, '_blank'); }
-    function shareResultTwitter() { if (!currentFestivalData) return; window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('The date for ' + currentFestivalData.name + ' is ' + document.getElementById('result-date').innerText + ' according to the Jantri.')}&url=${encodeURIComponent(window.location.href)}`, '_blank'); }
+    
+    function shareResultWhatsApp() { 
+        if (!currentFestivalData) return; 
+        const dateOutput = currentFestivalData.is_multi ? currentFestivalData.dates[0].date + " (Primary)" : document.getElementById('result-date').innerText;
+        window.open(`https://wa.me/?text=${encodeURIComponent('The date for ' + currentFestivalData.name + ' is ' + dateOutput + ' according to the Jantri. Check it here: ' + window.location.href)}`, '_blank'); 
+    }
+    function shareResultTwitter() { 
+        if (!currentFestivalData) return; 
+        const dateOutput = currentFestivalData.is_multi ? currentFestivalData.dates[0].date + " (Primary)" : document.getElementById('result-date').innerText;
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('The date for ' + currentFestivalData.name + ' is ' + dateOutput + ' according to the Jantri.')}&url=${encodeURIComponent(window.location.href)}`, '_blank'); 
+    }
+
     function openFeedback() { document.getElementById('feedback-modal').classList.remove('hidden'); }
     function closeFeedback() { document.getElementById('feedback-modal').classList.add('hidden'); }
     function toggleFeedbackType(type) {
@@ -470,6 +499,7 @@
         if (type === 'bug') { bugFields.classList.remove('hidden'); generalFields.classList.add('hidden'); } 
         else { bugFields.classList.add('hidden'); generalFields.classList.remove('hidden'); }
     }
+    
     function handleFeedbackSubmit(e) {
         e.preventDefault();
         const email = document.getElementById('fb_email').value;
