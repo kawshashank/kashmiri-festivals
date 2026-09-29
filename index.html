@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jantri — Kashmiri Hindu Festival Tracker</title>
+<title>Traditional Almanac — Kashmiri Hindu Festival Tracker</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -442,7 +442,7 @@
         }
         
         const title = encodeURIComponent(calTitle);
-        const details = encodeURIComponent('Kashmiri Hindu Festival calculated via Jantri data.');
+        const details = encodeURIComponent('Kashmiri Hindu Festival calculated via traditional almanac data.');
         const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dateStr}/${endDateStr}&details=${details}`;
         window.open(url, '_blank');
     }
@@ -469,7 +469,7 @@
                 icsContent.push(`DTSTART;VALUE=DATE:${dateStr}`);
                 icsContent.push(`DTEND;VALUE=DATE:${endDateStr}`);
                 icsContent.push(`SUMMARY:${currentFestivalData.name} ${titleSuffix}`);
-                icsContent.push(`DESCRIPTION:Kashmiri Hindu Festival calculated via Jantri.\\n\\nAligned to: ${d.tithi}`);
+                icsContent.push(`DESCRIPTION:Kashmiri Hindu Festival calculated via traditional almanac.\\n\\nAligned to: ${d.tithi}`);
                 icsContent.push('STATUS:CONFIRMED');
                 icsContent.push('TRANSP:TRANSPARENT');
                 icsContent.push('END:VEVENT');
@@ -490,7 +490,7 @@
             icsContent.push(`DTSTART;VALUE=DATE:${dateStr}`);
             icsContent.push(`DTEND;VALUE=DATE:${endDateStr}`);
             icsContent.push(`SUMMARY:${currentFestivalData.name}`);
-            icsContent.push('DESCRIPTION:Kashmiri Hindu Festival calculated via Jantri.');
+            icsContent.push('DESCRIPTION:Kashmiri Hindu Festival calculated via traditional almanac.');
             icsContent.push('STATUS:CONFIRMED');
             icsContent.push('TRANSP:TRANSPARENT');
             icsContent.push('END:VEVENT');
@@ -514,12 +514,12 @@
     function shareResultWhatsApp() { 
         if (!currentFestivalData) return; 
         const dateOutput = currentFestivalData.is_multi ? currentFestivalData.dates[0].date + " (Primary)" : document.getElementById('result-date').innerText;
-        window.open(`https://wa.me/?text=${encodeURIComponent('The date for ' + currentFestivalData.name + ' is ' + dateOutput + ' according to the Jantri. Check it here: ' + window.location.href)}`, '_blank'); 
+        window.open(`https://wa.me/?text=${encodeURIComponent('The date for ' + currentFestivalData.name + ' is ' + dateOutput + ' according to the traditional almanac. Check it here: ' + window.location.href)}`, '_blank'); 
     }
     function shareResultTwitter() { 
         if (!currentFestivalData) return; 
         const dateOutput = currentFestivalData.is_multi ? currentFestivalData.dates[0].date + " (Primary)" : document.getElementById('result-date').innerText;
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('The date for ' + currentFestivalData.name + ' is ' + dateOutput + ' according to the Jantri.')}&url=${encodeURIComponent(window.location.href)}`, '_blank'); 
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('The date for ' + currentFestivalData.name + ' is ' + dateOutput + ' according to the traditional almanac.')}&url=${encodeURIComponent(window.location.href)}`, '_blank'); 
     }
 
     function openFeedback() { document.getElementById('feedback-modal').classList.remove('hidden'); }
