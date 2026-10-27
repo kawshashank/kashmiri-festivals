@@ -81,13 +81,22 @@
     <div class="absolute bottom-[-16%] right-[-10%] w-[48%] h-[48%] rounded-full bg-[#9c4a30]/12 blur-[130px]" style="animation:glowPulse 11s ease-in-out infinite 1.5s;"></div>
 </div>
 
-<a href="https://vitastahub.vercel.app/" class="fixed top-4 right-4 sm:top-6 sm:right-6 z-[55] flex items-center gap-2 px-4 py-2 bg-white/40 backdrop-blur-md border border-[var(--line)] rounded-full shadow-sm text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[var(--ink-soft)] hover:text-[var(--brass)] hover:border-[var(--brass)] hover:bg-white/60 hover:shadow-md hover:-translate-x-0.5 transition-all">
-    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-    </svg>
-    <span class="hidden sm:inline">Vitasta Hub</span>
-    <span class="sm:hidden">Hub</span>
-</a>
+<div class="fixed top-4 right-4 sm:top-6 sm:right-6 z-[55] flex items-center gap-2">
+    <div id="hub-user-pill" class="hidden items-center gap-1.5 pl-3 pr-1.5 py-1.5 bg-white/85 backdrop-blur-md border border-[var(--line)] rounded-full shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span id="hub-user-name" class="text-[10px] sm:text-xs font-bold text-[var(--ink)] max-w-[100px] sm:max-w-[140px] truncate"></span>
+        <a id="hub-logout-link" href="/logout" class="ml-1 px-2.5 py-1 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 text-[10px] font-bold uppercase tracking-wider transition-colors" title="Sign out from Vitasta Hub & all calculators">
+            Logout
+        </a>
+    </div>
+    <a id="hub-back-link" href="https://vitastahub.vercel.app/" class="flex items-center gap-2 px-4 py-2 bg-white/40 backdrop-blur-md border border-[var(--line)] rounded-full shadow-sm text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[var(--ink-soft)] hover:text-[var(--brass)] hover:border-[var(--brass)] hover:bg-white/60 hover:shadow-md hover:-translate-x-0.5 transition-all">
+        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        <span class="hidden sm:inline">Vitasta Hub</span>
+        <span class="sm:hidden">Hub</span>
+    </a>
+</div>
 
 <div id="feedback-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-[#0e1119]/55 backdrop-blur-md p-4 h-[100dvh]">
     <div class="bg-[#fcfbf9] w-full max-w-lg rounded-[1.75rem] anim-grow-in border border-[var(--line)] shadow-2xl">
@@ -296,6 +305,103 @@
                 body: JSON.stringify({ festival_key: "ping", year: currentYear })
             }).catch(() => {});
         } catch (e) {}
+
+        // --- Hub Back-Link & Logged-In Session Sync ---
+        const proxied = window.location.pathname.startsWith('/festivals');
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const hubOrigin = proxied ? '' : (isLocal ? 'http://localhost:3000' : 'https://vitastahub.vercel.app');
+
+        const backLink = document.getElementById('hub-back-link');
+        const logoutLink = document.getElementById('hub-logout-link');
+        const userPill = document.getElementById('hub-user-pill');
+        const userNameEl = document.getElementById('hub-user-name');
+
+        if (backLink) backLink.href = `${hubOrigin}/`;
+        if (logoutLink) logoutLink.href = `${hubOrigin}/logout`;
+
+        let activeHubUser = null;
+        const showHubUser = (name) => {
+            activeHubUser = name;
+            if (userNameEl && userPill) {
+                userNameEl.textContent = name;
+                userPill.classList.remove('hidden');
+                userPill.classList.add('flex');
+            }
+        };
+        const hideHubUser = () => {
+            activeHubUser = null;
+            if (userPill) {
+                userPill.classList.add('hidden');
+                userPill.classList.remove('flex');
+            }
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const userParam = params.get('hub_user');
+        if (userParam) {
+            showHubUser(userParam);
+        }
+
+        fetch(`${hubOrigin}/api/hub-session`, { credentials: 'include' })
+            .then(res => res.ok ? res.json() : null)
+            .then(sessionData => {
+                if (sessionData && sessionData.authenticated && sessionData.user) {
+                    showHubUser(sessionData.user.firstName || sessionData.user.name || 'Member');
+                } else if (sessionData && !sessionData.authenticated) {
+                    hideHubUser();
+                }
+            })
+            .catch(() => {});
+
+        // 1-Hour Inactivity & Single-Session Guard when logged in
+        const INACTIVITY_LIMIT_MS = 60 * 60 * 1000;
+        const ACTIVITY_KEY = 'vitasta_last_activity';
+        let lastActive = Date.now();
+
+        const triggerLogout = () => {
+            hideHubUser();
+            try { localStorage.removeItem(ACTIVITY_KEY); } catch (e) {}
+            window.location.href = `${hubOrigin}/logout`;
+        };
+
+        const onActivity = () => {
+            if (!activeHubUser) return;
+            const now = Date.now();
+            if (now - lastActive >= INACTIVITY_LIMIT_MS) {
+                triggerLogout();
+                return;
+            }
+            if (now - lastActive > 10000) {
+                lastActive = now;
+                try { localStorage.setItem(ACTIVITY_KEY, String(now)); } catch (e) {}
+            }
+        };
+
+        ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
+            window.addEventListener(evt, onActivity, { passive: true });
+        });
+
+        setInterval(() => {
+            if (!activeHubUser) return;
+            const now = Date.now();
+            let storedLast = lastActive;
+            try {
+                const stored = localStorage.getItem(ACTIVITY_KEY);
+                if (stored) storedLast = Math.max(lastActive, Number(stored));
+            } catch (e) {}
+            if (now - storedLast >= INACTIVITY_LIMIT_MS) {
+                triggerLogout();
+                return;
+            }
+            if (document.visibilityState === 'visible') {
+                fetch(`${hubOrigin}/api/hub-session`, { credentials: 'include' })
+                    .then(res => res.ok ? res.json() : null)
+                    .then(sData => {
+                        if (sData && sData.invalidated) triggerLogout();
+                    })
+                    .catch(() => {});
+            }
+        }, 30000);
     });
 
     async function fetchFestival() {
