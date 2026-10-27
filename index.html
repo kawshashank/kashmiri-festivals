@@ -357,11 +357,21 @@
         const INACTIVITY_LIMIT_MS = 60 * 60 * 1000;
         const ACTIVITY_KEY = 'vitasta_last_activity';
         let lastActive = Date.now();
+        let lastSessionCheck = lastActive;
 
         const triggerLogout = () => {
             hideHubUser();
             try { localStorage.removeItem(ACTIVITY_KEY); } catch (e) {}
             window.location.href = `${hubOrigin}/logout`;
+        };
+
+        const verifySessionOnServer = () => {
+            fetch(`${hubOrigin}/api/hub-session`, { credentials: 'include' })
+                .then(res => res.ok ? res.json() : null)
+                .then(sData => {
+                    if (sData && sData.invalidated) triggerLogout();
+                })
+                .catch(() => {});
         };
 
         const onActivity = () => {
@@ -375,13 +385,14 @@
                 lastActive = now;
                 try { localStorage.setItem(ACTIVITY_KEY, String(now)); } catch (e) {}
             }
+            if (now - lastSessionCheck > 30000) {
+                lastSessionCheck = now;
+                verifySessionOnServer();
+            }
         };
 
-        ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
-            window.addEventListener(evt, onActivity, { passive: true });
-        });
-
-        setInterval(() => {
+        // Pure client-side idle check (0 DB calls when inactive so Neon can sleep)
+        const checkIdle = () => {
             if (!activeHubUser) return;
             const now = Date.now();
             let storedLast = lastActive;
@@ -391,17 +402,23 @@
             } catch (e) {}
             if (now - storedLast >= INACTIVITY_LIMIT_MS) {
                 triggerLogout();
-                return;
             }
+        };
+
+        ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
+            window.addEventListener(evt, onActivity, { passive: true });
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (!activeHubUser) return;
             if (document.visibilityState === 'visible') {
-                fetch(`${hubOrigin}/api/hub-session`, { credentials: 'include' })
-                    .then(res => res.ok ? res.json() : null)
-                    .then(sData => {
-                        if (sData && sData.invalidated) triggerLogout();
-                    })
-                    .catch(() => {});
+                checkIdle();
+                lastSessionCheck = Date.now();
+                verifySessionOnServer();
             }
-        }, 30000);
+        });
+
+        setInterval(checkIdle, 30000);
     });
 
     async function fetchFestival() {
